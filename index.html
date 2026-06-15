@@ -1,538 +1,247 @@
 <!doctype html>
-<html lang="es" class="h-full">
+<html lang="es" class="h-full dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AgentHub - Panel de Administracion</title>
+    <title>AgentHub - Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <script>
       window.tailwind = window.tailwind || {};
       window.tailwind.config = {
         darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            boxShadow: {
+              soft: "0 1px 3px rgba(0, 0, 0, 0.08)",
+              pop: "0 14px 28px rgba(2, 6, 23, 0.35)",
+            },
+            colors: {
+              brand: {
+                500: "#4f46e5",
+                600: "#3525cd",
+              },
+              panel: {
+                dark: "#2b2b38",
+                darker: "#242432",
+                ink: "#141925",
+              },
+            },
+          },
+        },
       };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="h-full bg-slate-100 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+  <body class="h-full bg-slate-100 text-slate-900 dark:bg-[#2f2f3d] dark:text-slate-100">
     <div class="min-h-full md:flex">
       <aside
         id="sidebar"
-        class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 md:static md:translate-x-0"
+        class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full border-r border-slate-700 bg-[#292939] transition-transform duration-300 md:static md:translate-x-0"
       >
-        <div class="flex h-16 items-center justify-between border-b border-slate-200 px-4 dark:border-slate-800">
+        <div class="flex h-16 items-center justify-between border-b border-slate-700/80 px-4">
           <div>
-            <p class="text-xs uppercase tracking-wider text-cyan-600 dark:text-cyan-400">AgentHub</p>
-            <h1 class="text-lg font-semibold">Admin Panel</h1>
+            <p class="text-2xl font-semibold text-slate-100">AgentHub</p>
+            <p class="text-xs text-slate-400">Internal Admin Panel</p>
           </div>
           <button
             id="closeSidebarBtn"
-            class="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 md:hidden"
+            class="rounded-md p-2 text-slate-400 hover:bg-slate-700 hover:text-slate-100 md:hidden"
             aria-label="Cerrar menu"
           >
             ✕
           </button>
         </div>
 
-        <nav class="space-y-1 p-3" id="sidebarNav">
-          <button data-section="dashboard" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Dashboard</button>
-          <button data-section="usuarios" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Gestion de usuarios</button>
-          <button data-section="agentes" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Gestion de agentes</button>
-          <button data-section="skills" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Skills</button>
-          <button data-section="contratos" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Contrataciones</button>
-          <button data-section="errores" class="nav-item w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition">Log de errores</button>
+        <nav id="sidebarNav" class="space-y-1 p-2">
+          <button data-section="dashboard" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">Dashboard</button>
+          <button data-section="usuarios" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">User Management</button>
+          <button data-section="agentes" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">Agent Management</button>
+          <button data-section="skills" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">Skills</button>
+          <button data-section="contratos" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">Contracts</button>
+          <button data-section="errores" class="nav-item w-full rounded-md px-4 py-2.5 text-left text-sm">Error Logs</button>
         </nav>
+
+        <div class="absolute bottom-0 left-0 w-full border-t border-slate-700/80 p-4">
+          <p class="mb-2 text-sm text-slate-500">Settings</p>
+          <p class="text-sm text-slate-500">Support</p>
+        </div>
       </aside>
 
-      <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-900/50 md:hidden"></div>
+      <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-slate-950/50 md:hidden"></div>
 
       <main class="min-h-screen flex-1">
-        <header class="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90 md:px-6">
+        <header class="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-slate-600/40 bg-[#353543] px-4 md:px-6">
           <div class="flex items-center gap-3">
             <button
               id="openSidebarBtn"
-              class="rounded-md p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-100 md:hidden"
+              class="rounded-md p-2 text-slate-300 hover:bg-slate-700 hover:text-slate-100 md:hidden"
               aria-label="Abrir menu"
             >
               ☰
             </button>
-            <h2 id="sectionTitle" class="text-lg font-semibold">Dashboard</h2>
+            <h2 id="sectionTitle" class="text-[34px] font-semibold tracking-tight text-slate-100 md:text-[30px]">Dashboard</h2>
           </div>
-          <button
-            id="themeToggle"
-            class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-          >
-            <span id="themeIcon">☀</span>
-            <span id="themeText">Modo claro</span>
-          </button>
+
+          <div class="flex items-center gap-3">
+            <div class="hidden w-80 rounded-lg border border-slate-600 bg-[#2d2d3b] px-3 py-2 text-sm text-slate-400 md:flex">Search...</div>
+            <button id="themeToggle" class="rounded-md border border-slate-600 px-3 py-2 text-xs text-slate-200">
+              <span id="themeText">Modo claro</span>
+            </button>
+          </div>
         </header>
 
-        <div class="p-4 md:p-6">
-          <section data-view="dashboard" class="view space-y-6">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <article class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-emerald-900 dark:bg-emerald-950/30">
-                <p class="text-xl">💰</p>
-                <p class="mt-3 text-sm text-emerald-700 dark:text-emerald-300">Ingresos totales (mes)</p>
-                <p class="mt-1 text-2xl font-bold">USD 124,980.00</p>
+        <div class="p-4 md:p-5">
+          <section data-view="dashboard" class="view space-y-5">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <article class="rounded-lg border border-slate-700 bg-[#020f31] p-3 shadow-soft">
+                <p class="text-[11px] uppercase tracking-wide text-slate-400">Total Monthly Revenue</p>
+                <p class="mt-3 text-5xl font-semibold text-slate-100">$45,230.50</p>
+                <p class="mt-2 text-xs text-emerald-400">+12.5% from last month</p>
               </article>
-              <article class="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-amber-900 dark:bg-amber-950/30">
-                <p class="text-xl">📉</p>
-                <p class="mt-3 text-sm text-amber-700 dark:text-amber-300">Perdida por descuentos</p>
-                <p class="mt-1 text-2xl font-bold">USD 8,430.00</p>
+              <article class="rounded-lg border border-slate-700 bg-[#020f31] p-3 shadow-soft">
+                <p class="text-[11px] uppercase tracking-wide text-slate-400">Discount/Coupon Losses</p>
+                <p class="mt-3 text-5xl font-semibold text-slate-100">$1,240.00</p>
+                <p class="mt-2 text-xs text-slate-400">-4.2% from last month</p>
               </article>
-              <article class="rounded-2xl border border-sky-200 bg-sky-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-sky-900 dark:bg-sky-950/30">
-                <p class="text-xl">🤖</p>
-                <p class="mt-3 text-sm text-sky-700 dark:text-sky-300">Agentes activos</p>
-                <p class="mt-1 text-2xl font-bold">76</p>
+              <article class="rounded-lg border border-slate-700 bg-[#020f31] p-3 shadow-soft">
+                <p class="text-[11px] uppercase tracking-wide text-slate-400">Active Agents</p>
+                <p class="mt-3 text-5xl font-semibold text-slate-100">128</p>
+                <p class="mt-2 text-xs text-emerald-400">Running currently</p>
               </article>
-              <article class="rounded-2xl border border-rose-200 bg-rose-50 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-rose-900 dark:bg-rose-950/30">
-                <p class="text-xl">⚠</p>
-                <p class="mt-3 text-sm text-rose-700 dark:text-rose-300">Agentes fallando</p>
-                <p class="mt-1 text-2xl font-bold">9</p>
+              <article class="rounded-lg border border-slate-700 bg-[#020f31] p-3 shadow-soft">
+                <p class="text-[11px] uppercase tracking-wide text-slate-400">Failing Agents</p>
+                <p class="mt-3 text-5xl font-semibold text-rose-500">3</p>
+                <p class="mt-2 text-xs text-rose-500">Requires immediate attention</p>
               </article>
             </div>
 
-            <div class="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-10 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-              Actividad semanal (placeholder)
+            <div class="grid min-h-[540px] place-items-center rounded-lg border border-dashed border-slate-600 bg-[#898d9a]/90 text-center">
+              <div>
+                <p class="text-3xl text-slate-600">↗</p>
+                <p class="mt-2 text-4xl font-medium text-slate-700">Weekly Activity</p>
+                <p class="mt-2 text-sm text-slate-500">Chart component placeholder</p>
+              </div>
             </div>
           </section>
 
           <section data-view="usuarios" class="view hidden space-y-4">
-            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="w-full rounded-md border border-slate-600 bg-[#2d2d3b] px-3 py-2 text-sm text-slate-400 md:w-80">Search users...</div>
+              <div class="flex items-center gap-2">
+                <button class="rounded border border-slate-600 px-3 py-2 text-xs">Filter</button>
+                <button class="rounded bg-brand-600 px-3 py-2 text-xs text-white">Add User</button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-700 bg-[#2f2f3e]">
               <table class="min-w-full text-left text-sm">
-                <thead class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                <thead class="border-b border-slate-700 text-[11px] uppercase text-slate-400">
                   <tr>
-                    <th class="px-4 py-3 font-medium">Nombre</th>
-                    <th class="px-4 py-3 font-medium">Email</th>
-                    <th class="px-4 py-3 font-medium">Plan</th>
-                    <th class="px-4 py-3 font-medium">Estado</th>
-                    <th class="px-4 py-3"></th>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Email</th>
+                    <th class="px-4 py-3">Plan</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                  <tr>
-                    <td class="px-4 py-3">Camila Vargas</td>
-                    <td class="px-4 py-3">camila@acme.ai</td>
-                    <td class="px-4 py-3">Enterprise</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">Activo</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="user-1">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="user-1">
-                        <button class="action-view-user block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-user-id="u1">Ver detalle</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Usuario Camila Vargas">Eliminar</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Diego Marin</td>
-                    <td class="px-4 py-3">diego@nova.io</td>
-                    <td class="px-4 py-3">Pro</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="user-2">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="user-2">
-                        <button class="action-view-user block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-user-id="u2">Ver detalle</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Usuario Diego Marin">Eliminar</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Lucia Paredes</td>
-                    <td class="px-4 py-3">lucia@altair.com</td>
-                    <td class="px-4 py-3">Starter</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-700 dark:text-slate-200">Inactivo</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="user-3">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="user-3">
-                        <button class="action-view-user block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-user-id="u3">Ver detalle</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Usuario Lucia Paredes">Eliminar</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Mateo Rios</td>
-                    <td class="px-4 py-3">mateo@zenit.ai</td>
-                    <td class="px-4 py-3">Enterprise</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">Activo</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="user-4">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="user-4">
-                        <button class="action-view-user block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-user-id="u4">Ver detalle</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Usuario Mateo Rios">Eliminar</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Ana Solis</td>
-                    <td class="px-4 py-3">ana@pixelops.dev</td>
-                    <td class="px-4 py-3">Pro</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">Activo</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="user-5">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="user-5">
-                        <button class="action-view-user block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-user-id="u5">Ver detalle</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Usuario Ana Solis">Eliminar</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody id="usersTableBody" class="divide-y divide-slate-700"></tbody>
               </table>
             </div>
           </section>
 
           <section data-view="agentes" class="view hidden space-y-4">
-            <div class="space-y-3">
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="font-semibold">FinOps Copilot</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Propietario: Camila Vargas</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">Activo</span>
-                    <div class="relative">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="agent-1">⋮</button>
-                      <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="agent-1">
-                        <button class="action-config-agent block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-agent-id="a1">Configurar</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Agente FinOps Copilot">Eliminar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <button class="skill-toggle text-sm font-medium text-cyan-700 dark:text-cyan-300" data-collapse="agent-skills-1">Ver skills</button>
-                  <ul id="agent-skills-1" class="mt-2 max-h-0 overflow-hidden rounded-lg bg-slate-100 px-3 opacity-0 transition-all duration-300 dark:bg-slate-800">
-                    <li class="py-2 text-sm">Web Navigator</li>
-                    <li class="py-2 text-sm">Invoice Reader</li>
-                    <li class="py-2 text-sm">Calendar Sync</li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="font-semibold">Support Triage Bot</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Propietario: Mateo Rios</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Inactivo</span>
-                    <div class="relative">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="agent-2">⋮</button>
-                      <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="agent-2">
-                        <button class="action-config-agent block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-agent-id="a2">Configurar</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Agente Support Triage Bot">Eliminar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <button class="skill-toggle text-sm font-medium text-cyan-700 dark:text-cyan-300" data-collapse="agent-skills-2">Ver skills</button>
-                  <ul id="agent-skills-2" class="mt-2 max-h-0 overflow-hidden rounded-lg bg-slate-100 px-3 opacity-0 transition-all duration-300 dark:bg-slate-800">
-                    <li class="py-2 text-sm">Ticket Classifier</li>
-                    <li class="py-2 text-sm">CRM Writer</li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="font-semibold">Legal Draft Assistant</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Propietario: Ana Solis</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">Fallando</span>
-                    <div class="relative">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="agent-3">⋮</button>
-                      <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="agent-3">
-                        <button class="action-config-agent block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-agent-id="a3">Configurar</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Agente Legal Draft Assistant">Eliminar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <button class="skill-toggle text-sm font-medium text-cyan-700 dark:text-cyan-300" data-collapse="agent-skills-3">Ver skills</button>
-                  <ul id="agent-skills-3" class="mt-2 max-h-0 overflow-hidden rounded-lg bg-slate-100 px-3 opacity-0 transition-all duration-300 dark:bg-slate-800">
-                    <li class="py-2 text-sm">Document OCR</li>
-                    <li class="py-2 text-sm">Clause Checker</li>
-                    <li class="py-2 text-sm">Risk Scoring</li>
-                  </ul>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p class="font-semibold">Growth Insights AI</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Propietario: Lucia Paredes</p>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">Activo</span>
-                    <div class="relative">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="agent-4">⋮</button>
-                      <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="agent-4">
-                        <button class="action-config-agent block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-agent-id="a4">Configurar</button>
-                        <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Agente Growth Insights AI">Eliminar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <button class="skill-toggle text-sm font-medium text-cyan-700 dark:text-cyan-300" data-collapse="agent-skills-4">Ver skills</button>
-                  <ul id="agent-skills-4" class="mt-2 max-h-0 overflow-hidden rounded-lg bg-slate-100 px-3 opacity-0 transition-all duration-300 dark:bg-slate-800">
-                    <li class="py-2 text-sm">Web Analytics</li>
-                    <li class="py-2 text-sm">Lead Enrichment</li>
-                  </ul>
-                </div>
-              </article>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="text-sm text-slate-300">Manage and configure active AI agents across the hub.</p>
+              <div class="flex items-center gap-2">
+                <button class="rounded border border-slate-600 px-3 py-2 text-xs">Filter</button>
+                <button class="rounded bg-brand-600 px-3 py-2 text-xs text-white">New Agent</button>
+              </div>
             </div>
+            <div id="agentsList" class="grid grid-cols-1 gap-3 xl:grid-cols-2"></div>
           </section>
 
           <section data-view="skills" class="view hidden space-y-4">
-            <div class="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-900 dark:border-cyan-900 dark:bg-cyan-950/30 dark:text-cyan-100">
-              Una skill en AgentHub es una capacidad modular reutilizable que extiende lo que un agente puede hacer (leer documentos, navegar, clasificar, coordinar tareas), permitiendo combinaciones segun cada caso de negocio.
+            <h3 class="text-5xl font-semibold text-slate-100">Skill Registry</h3>
+            <p class="max-w-4xl text-sm text-slate-300">
+              Skills define the atomic capabilities available to your agents. From web browsing and data scraping to complex API integrations, these reusable modules determine what your AI can interact with.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="w-full rounded-md border border-slate-600 bg-[#2d2d3b] px-3 py-2 text-sm text-slate-400 md:w-96">Search skills by name or description...</div>
+              <div class="flex items-center gap-2">
+                <button class="rounded border border-slate-600 px-3 py-2 text-xs">Filter</button>
+                <button class="rounded bg-brand-600 px-3 py-2 text-xs text-white">Add Skill</button>
+              </div>
             </div>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 class="font-semibold">Web Navigator</h3>
-                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Navegacion automatizada de portales y formularios.</p>
-                    <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">12 agentes</p>
-                  </div>
-                  <div class="relative">
-                    <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="skill-1">⋮</button>
-                    <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="skill-1">
-                      <button class="action-view-skill block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-skill-id="s1">Ver detalle</button>
-                      <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Skill Web Navigator">Eliminar</button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 class="font-semibold">Document OCR</h3>
-                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Extraccion de texto y metadatos desde PDFs e imagenes.</p>
-                    <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">9 agentes</p>
-                  </div>
-                  <div class="relative">
-                    <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="skill-2">⋮</button>
-                    <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="skill-2">
-                      <button class="action-view-skill block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-skill-id="s2">Ver detalle</button>
-                      <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Skill Document OCR">Eliminar</button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 class="font-semibold">Calendar Sync</h3>
-                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Gestiona disponibilidad, reuniones y recordatorios.</p>
-                    <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">7 agentes</p>
-                  </div>
-                  <div class="relative">
-                    <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="skill-3">⋮</button>
-                    <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="skill-3">
-                      <button class="action-view-skill block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-skill-id="s3">Ver detalle</button>
-                      <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Skill Calendar Sync">Eliminar</button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              <article class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 class="font-semibold">Ticket Classifier</h3>
-                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Prioriza tickets por urgencia, impacto y tema.</p>
-                    <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">5 agentes</p>
-                  </div>
-                  <div class="relative">
-                    <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="skill-4">⋮</button>
-                    <div class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="skill-4">
-                      <button class="action-view-skill block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-skill-id="s4">Ver detalle</button>
-                      <button class="action-delete block w-full rounded-md px-3 py-2 text-left text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30" data-entity="Skill Ticket Classifier">Eliminar</button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </div>
+            <div id="skillsGrid" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
           </section>
 
           <section data-view="contratos" class="view hidden space-y-4">
-            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-              <table class="min-w-full text-left text-sm">
-                <thead class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                  <tr>
-                    <th class="px-4 py-3 font-medium">Cliente</th>
-                    <th class="px-4 py-3 font-medium">Agente</th>
-                    <th class="px-4 py-3 font-medium">Skills</th>
-                    <th class="px-4 py-3 font-medium">Fechas</th>
-                    <th class="px-4 py-3 font-medium">Importe pagado</th>
-                    <th class="px-4 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                  <tr>
-                    <td class="px-4 py-3">Acme Logistics</td>
-                    <td class="px-4 py-3">FinOps Copilot</td>
-                    <td class="px-4 py-3">Web Navigator, Invoice Reader</td>
-                    <td class="px-4 py-3">2026-01-01 a 2026-06-30</td>
-                    <td class="px-4 py-3">USD 14,900.00</td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="contract-1">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="contract-1">
-                        <button class="action-view-contract block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-contract-id="c1">Ver detalle</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Nova Retail</td>
-                    <td class="px-4 py-3">Support Triage Bot</td>
-                    <td class="px-4 py-3">Ticket Classifier, CRM Writer</td>
-                    <td class="px-4 py-3">2025-10-15 a 2026-04-15</td>
-                    <td class="px-4 py-3">USD 9,800.00</td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="contract-2">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="contract-2">
-                        <button class="action-view-contract block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-contract-id="c2">Ver detalle</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Altair Legal</td>
-                    <td class="px-4 py-3">Legal Draft Assistant</td>
-                    <td class="px-4 py-3">Document OCR, Clause Checker</td>
-                    <td class="px-4 py-3">2026-03-01 a 2026-12-31</td>
-                    <td class="px-4 py-3">USD 18,200.00</td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="contract-3">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="contract-3">
-                        <button class="action-view-contract block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-contract-id="c3">Ver detalle</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="px-4 py-3">Zenit Media</td>
-                    <td class="px-4 py-3">Growth Insights AI</td>
-                    <td class="px-4 py-3">Web Analytics, Lead Enrichment</td>
-                    <td class="px-4 py-3">2025-08-01 a 2026-02-01</td>
-                    <td class="px-4 py-3">USD 11,400.00</td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="contract-4">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-40 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="contract-4">
-                        <button class="action-view-contract block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-contract-id="c4">Ver detalle</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p class="text-[33px] font-semibold text-slate-100">Active Contracts</p>
+                <p class="text-sm text-slate-300">Manage and review ongoing agent deployments and skill consumption.</p>
+              </div>
+              <button class="rounded bg-brand-600 px-3 py-2 text-xs text-white">New Contract</button>
+            </div>
+
+            <div class="rounded-lg border border-slate-700 bg-[#020f31] p-3">
+              <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="w-full rounded-md border border-slate-600 bg-[#1d2c47] px-3 py-2 text-sm text-slate-400 md:w-72">Search contracts...</div>
+                <div class="flex items-center gap-2">
+                  <button class="rounded border border-slate-600 px-3 py-2 text-xs">Filter</button>
+                  <button class="rounded border border-slate-600 px-3 py-2 text-xs">Export</button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-left text-sm">
+                  <thead class="border-b border-slate-700 text-[11px] uppercase text-slate-400">
+                    <tr>
+                      <th class="px-3 py-2">Client / Org</th>
+                      <th class="px-3 py-2">Assigned Agent</th>
+                      <th class="px-3 py-2">Active Skills</th>
+                      <th class="px-3 py-2">Duration</th>
+                      <th class="px-3 py-2">Total Amount (USD)</th>
+                      <th class="px-3 py-2 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contractsTableBody" class="divide-y divide-slate-800"></tbody>
+                </table>
+              </div>
             </div>
           </section>
 
           <section data-view="errores" class="view hidden space-y-4">
-            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="w-full rounded-md border border-slate-600 bg-[#2d2d3b] px-3 py-2 text-sm text-slate-400 md:w-72">Search logs...</div>
+              <div class="flex items-center gap-2">
+                <button class="rounded border border-slate-600 px-3 py-2 text-xs">All Severities</button>
+                <button class="rounded border border-slate-600 px-3 py-2 text-xs">All Agents</button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-700 bg-[#262633]">
               <table class="min-w-full text-left text-sm">
-                <thead class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                <thead class="border-b border-slate-700 text-[11px] uppercase text-slate-400">
                   <tr>
-                    <th class="px-4 py-3 font-medium">Timestamp</th>
-                    <th class="px-4 py-3 font-medium">Agente</th>
-                    <th class="px-4 py-3 font-medium">Tipo</th>
-                    <th class="px-4 py-3 font-medium">Descripcion</th>
-                    <th class="px-4 py-3 font-medium">Estado</th>
-                    <th class="px-4 py-3"></th>
+                    <th class="px-4 py-3">Timestamp</th>
+                    <th class="px-4 py-3">Severity</th>
+                    <th class="px-4 py-3">Agent ID</th>
+                    <th class="px-4 py-3">Error Type</th>
+                    <th class="px-4 py-3">Description</th>
+                    <th class="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-800" id="errorsTableBody">
-                  <tr data-error-id="e1">
-                    <td class="px-4 py-3">2026-06-15 09:22</td>
-                    <td class="px-4 py-3">Legal Draft Assistant</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">Critico</span></td>
-                    <td class="px-4 py-3">Timeout en verificacion de clausulas.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-1">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-1">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e1">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e1">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-error-id="e2">
-                    <td class="px-4 py-3">2026-06-15 08:40</td>
-                    <td class="px-4 py-3">Support Triage Bot</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Warning</span></td>
-                    <td class="px-4 py-3">Sincronizacion lenta con CRM.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-2">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-2">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e2">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e2">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-error-id="e3">
-                    <td class="px-4 py-3">2026-06-15 08:10</td>
-                    <td class="px-4 py-3">FinOps Copilot</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">Error</span></td>
-                    <td class="px-4 py-3">Fallo al parsear factura escaneada.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-3">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-3">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e3">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e3">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-error-id="e4">
-                    <td class="px-4 py-3">2026-06-15 07:47</td>
-                    <td class="px-4 py-3">Growth Insights AI</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Warning</span></td>
-                    <td class="px-4 py-3">Fuente de trafico sin respuesta.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-4">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-4">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e4">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e4">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-error-id="e5">
-                    <td class="px-4 py-3">2026-06-15 07:03</td>
-                    <td class="px-4 py-3">Legal Draft Assistant</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">Critico</span></td>
-                    <td class="px-4 py-3">Memoria excedida en analisis de lote.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-5">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-5">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e5">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e5">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-error-id="e6">
-                    <td class="px-4 py-3">2026-06-14 23:14</td>
-                    <td class="px-4 py-3">Support Triage Bot</td>
-                    <td class="px-4 py-3"><span class="rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">Error</span></td>
-                    <td class="px-4 py-3">Webhook de ticket devolvio 502.</td>
-                    <td class="px-4 py-3"><span class="error-status rounded-full bg-amber-100 px-2 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">Pendiente</span></td>
-                    <td class="relative px-4 py-3 text-right">
-                      <button class="dropdown-toggle rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" data-dropdown="error-6">⋮</button>
-                      <div class="dropdown-menu absolute right-4 top-10 z-10 hidden w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg dark:border-slate-700 dark:bg-slate-800" data-dropdown-menu="error-6">
-                        <button class="action-view-error block w-full rounded-md px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700" data-error-id="e6">Ver detalle</button>
-                        <button class="action-resolve-error block w-full rounded-md px-3 py-2 text-left text-emerald-700 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-900/30" data-error-id="e6">Marcar como resuelto</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody id="errorsTableBody" class="divide-y divide-slate-700"></tbody>
               </table>
             </div>
           </section>
@@ -540,1167 +249,679 @@
       </main>
     </div>
 
-    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 p-4">
-      <div class="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900">
-        <div class="mb-4 flex items-start justify-between gap-3">
-          <h3 id="modalTitle" class="text-lg font-semibold">Detalle</h3>
-          <button id="modalCloseBtn" class="rounded-md px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Cerrar modal">✕</button>
+    <div id="globalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 p-4">
+      <div class="w-full max-w-2xl rounded-lg border border-slate-700 bg-[#121724] shadow-pop">
+        <div class="flex items-center justify-between border-b border-slate-700 px-4 py-3">
+          <h3 id="modalTitle" class="text-lg font-semibold text-slate-100">Detalle</h3>
+          <button id="closeModal" class="rounded border border-slate-600 px-2 py-1 text-sm text-slate-200">Cerrar</button>
         </div>
-        <div id="modalBody" class="space-y-3 text-sm text-slate-700 dark:text-slate-200"></div>
-        <div class="mt-6 text-right">
-          <button id="modalFooterCloseBtn" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-800">Cerrar</button>
-        </div>
+        <div id="modalContent" class="max-h-[70vh] overflow-auto px-4 py-4 text-sm text-slate-200"></div>
       </div>
     </div>
 
-    <div id="toast" class="fixed bottom-4 right-4 z-50 hidden rounded-lg bg-slate-900 px-4 py-3 text-sm text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"></div>
+    <div id="toast" class="fixed bottom-4 right-4 z-50 hidden rounded-md bg-brand-600 px-3 py-2 text-sm text-white shadow-pop"></div>
 
     <script>
-      const sections = {
+      const state = {
+        section: "dashboard",
+        openDropdownId: null,
+        modalOpen: false,
+        resolvedErrors: {},
+      };
+
+      const users = [
+        { id: 1, name: "Alice Johnson", email: "alice@acmecorp.com", plan: "Enterprise", status: "Activo", joinedAt: "2024-11-12", notes: "Admin principal de billing." },
+        { id: 2, name: "Bob Smith", email: "bsmith@techstartup.io", plan: "Pro", status: "Activo", joinedAt: "2025-01-04", notes: "Gestiona workflows de soporte." },
+        { id: 3, name: "Charlie Davis", email: "cdavis@freelance.net", plan: "Free", status: "Suspendido", joinedAt: "2026-02-19", notes: "Cuenta suspendida por pago fallido." },
+        { id: 4, name: "Diana Prince", email: "diana@themyscira.gov", plan: "Enterprise", status: "Activo", joinedAt: "2025-09-09", notes: "Acceso a operaciones globales." },
+        { id: 5, name: "Evan Wright", email: "evan.w@designstudio.co", plan: "Pro", status: "Activo", joinedAt: "2026-03-02", notes: "Propietario de agentes de Growth." },
+        { id: 6, name: "Fiona Gallagher", email: "fgallagher@southside.com", plan: "Free", status: "Activo", joinedAt: "2026-03-12", notes: "Uso bajo, plan basico." },
+      ];
+
+      const agents = [
+        {
+          id: 1,
+          name: "Data Ingestion Bot",
+          owner: "ETL Team",
+          status: "Activo",
+          uptime: "99.9%",
+          tasks: "1,204",
+          version: "v2.4.1",
+          skills: ["Web Scrape", "Data Parse", "Queue Push"],
+          prompt: "Eres Data Ingestion Bot. Procesa fuentes externas, valida estructura y prioriza calidad de datos.",
+        },
+        {
+          id: 2,
+          name: "Financial Report Gen",
+          owner: "Finance Ops",
+          status: "Fallando",
+          uptime: "82.4%",
+          tasks: "15",
+          version: "v1.0.9",
+          skills: ["SQL Query", "Spreadsheet Parse"],
+          prompt: "Eres Financial Report Gen. Consolida KPIs financieros y marca desviaciones criticas.",
+        },
+        {
+          id: 3,
+          name: "Market Research Crawler",
+          owner: "Strategy Dept",
+          status: "Inactivo",
+          uptime: "--",
+          tasks: "0",
+          version: "v3.1.0",
+          skills: ["Web Browser", "Competitor Scan", "Trend Detect", "Summary"],
+          prompt: "Eres Market Research Crawler. Recolecta insight competitivo y sintetiza recomendaciones accionables.",
+        },
+        {
+          id: 4,
+          name: "Support Resolver",
+          owner: "Customer Success",
+          status: "Activo",
+          uptime: "97.1%",
+          tasks: "672",
+          version: "v2.0.3",
+          skills: ["Ticket Classifier", "Response Draft", "Escalation Router"],
+          prompt: "Eres Support Resolver. Clasifica tickets y ofrece respuesta inicial con tono profesional.",
+        },
+      ];
+
+      const skills = [
+        {
+          id: 1,
+          name: "Web Browser",
+          description: "Allows the agent to search the web, read HTML pages, and extract text content.",
+          usage: 42,
+          label: "Core",
+          detail: "Ideal para investigacion de mercado, monitoreo de competencia y enriquecimiento de leads.",
+        },
+        {
+          id: 2,
+          name: "SQL Query Gen",
+          description: "Translates natural language intent into verified SQL queries for PostgreSQL.",
+          usage: 18,
+          label: "Database",
+          detail: "Acelera analisis operacional permitiendo consultas seguras sobre data warehouse.",
+        },
+        {
+          id: 3,
+          name: "Python Execution",
+          description: "Executes raw Python code in a sandboxed environment for data tasks.",
+          usage: 8,
+          label: "Compute",
+          detail: "Util para limpieza de datos, estadistica y generacion de reportes tecnicos complejos.",
+        },
+        {
+          id: 4,
+          name: "Calendar Sync",
+          description: "Coordinates calendars, reminders, and availability across teams.",
+          usage: 14,
+          label: "Productivity",
+          detail: "Permite automatizar reuniones y evitar conflictos entre equipos globales.",
+        },
+      ];
+
+      const contracts = [
+        {
+          id: 1,
+          client: "Acme Corp",
+          agent: "Nexus-Support-V4",
+          skills: ["NLP Proc", "DB Query", "+2"],
+          duration: "Oct 01, 2023 - Dec 31, 2023",
+          status: "Ongoing",
+          total: 12450.0,
+          breakdown: [
+            { name: "NLP Proc", price: 4500.0 },
+            { name: "DB Query", price: 3200.0 },
+            { name: "Workflow Router", price: 2400.0 },
+            { name: "Base Agent License", price: 2350.0 },
+          ],
+        },
+        {
+          id: 2,
+          client: "Globex Inc.",
+          agent: "Data-Miner-X",
+          skills: ["Web Scrape", "Data Viz"],
+          duration: "Nov 15, 2023 - Nov 15, 2024",
+          status: "Ongoing",
+          total: 45100.0,
+          breakdown: [
+            { name: "Web Scrape", price: 17100.0 },
+            { name: "Data Viz", price: 9800.0 },
+            { name: "Base Agent License", price: 18200.0 },
+          ],
+        },
+        {
+          id: 3,
+          client: "Stark Ind.",
+          agent: "Ops-Director-1",
+          skills: ["Logistics", "Scheduling", "+4"],
+          duration: "Jan 01, 2024 - Dec 31, 2024",
+          status: "Pending Start",
+          total: 120500.0,
+          breakdown: [
+            { name: "Logistics", price: 41200.0 },
+            { name: "Scheduling", price: 28700.0 },
+            { name: "Advanced Ops Bundle", price: 50600.0 },
+          ],
+        },
+        {
+          id: 4,
+          client: "Initech",
+          agent: "Fin-Bot-Beta",
+          skills: ["Accounting"],
+          duration: "Feb 01, 2023 - Aug 01, 2023",
+          status: "Completed",
+          total: 8200.0,
+          breakdown: [
+            { name: "Accounting", price: 4200.0 },
+            { name: "Base Agent License", price: 4000.0 },
+          ],
+        },
+      ];
+
+      const errors = [
+        {
+          id: 1,
+          timestamp: "2023-10-27 14:32:01 UTC",
+          severity: "Critico",
+          agentId: "DB-Sync-Worker",
+          type: "ConnectionTimeout",
+          description: "Failed to connect to primary Postgres cluster.",
+          trace: "TimeoutError: Could not establish connection to postgres-primary:5432 in 12000ms at dbClient.ts:89",
+        },
+        {
+          id: 2,
+          timestamp: "2023-10-27 14:28:15 UTC",
+          severity: "Error",
+          agentId: "NLP-Processor-Alpha",
+          type: "TokenLimitExceeded",
+          description: "Input payload exceeded max context window.",
+          trace: "TokenLimitError: max tokens 8192 exceeded by request payload in nlpProcessor.js:241",
+        },
+        {
+          id: 3,
+          timestamp: "2023-10-27 14:15:02 UTC",
+          severity: "Warning",
+          agentId: "DataScraper-01",
+          type: "RateLimitWarning",
+          description: "Approaching API rate limit for external provider.",
+          trace: "Warning: 89% of hourly API quota consumed for provider X in scraperAgent.ts:133",
+        },
+        {
+          id: 4,
+          timestamp: "2023-10-27 13:55:44 UTC",
+          severity: "Error",
+          agentId: "DataScraper-01",
+          type: "ParseFailure",
+          description: "Malformed JSON response from target endpoint.",
+          trace: "SyntaxError: Unexpected token < in JSON at position 0 in parser.ts:57",
+        },
+        {
+          id: 5,
+          timestamp: "2023-10-27 13:21:17 UTC",
+          severity: "Critico",
+          agentId: "Ops-Director-1",
+          type: "OrchestrationAbort",
+          description: "Workflow canceled due to dependency chain failure.",
+          trace: "Critical: Dependency node failed and abort signal propagated in orchestrator.ts:402",
+        },
+        {
+          id: 6,
+          timestamp: "2023-10-27 12:48:03 UTC",
+          severity: "Warning",
+          agentId: "Fin-Bot-Beta",
+          type: "StaleDataWarning",
+          description: "Data snapshot older than freshness threshold.",
+          trace: "Warning: snapshot age 4h exceeds max allowed 1h in freshnessGuard.ts:29",
+        },
+      ];
+
+      const sectionTitles = {
         dashboard: "Dashboard",
-        usuarios: "Gestion de usuarios",
-        agentes: "Gestion de agentes",
+        usuarios: "User Management",
+        agentes: "Agent Management",
         skills: "Skills",
-        contratos: "Contrataciones",
-        errores: "Log de errores",
+        contratos: "Contracts",
+        errores: "Error Logs",
       };
 
-      const userDetails = {
-        u1: { nombre: "Camila Vargas", email: "camila@acme.ai", plan: "Enterprise", estado: "Activo", alta: "2025-02-12", notas: "Cuenta estrategica con uso intensivo de agentes FinOps." },
-        u2: { nombre: "Diego Marin", email: "diego@nova.io", plan: "Pro", estado: "Pendiente", alta: "2026-01-20", notas: "Pendiente de validacion de metodo de pago." },
-        u3: { nombre: "Lucia Paredes", email: "lucia@altair.com", plan: "Starter", estado: "Inactivo", alta: "2024-11-03", notas: "Contrato pausado por reestructuracion interna." },
-        u4: { nombre: "Mateo Rios", email: "mateo@zenit.ai", plan: "Enterprise", estado: "Activo", alta: "2024-07-18", notas: "Administra dos agentes de soporte multi-region." },
-        u5: { nombre: "Ana Solis", email: "ana@pixelops.dev", plan: "Pro", estado: "Activo", alta: "2025-09-05", notas: "Solicita reportes semanales automatizados." },
-      };
-
-      const agentPrompts = {
-        a1: "Eres FinOps Copilot. Analiza facturas y contratos, detecta sobrecostos, propone optimizacion y resume recomendaciones en bullets accionables.",
-        a2: "Eres Support Triage Bot. Clasifica tickets por urgencia, sentimiento y area, y sugiere respuesta inicial para el equipo de soporte.",
-        a3: "Eres Legal Draft Assistant. Revisa borradores legales, destaca riesgos, inconsistencias de clausulas y puntos de negociacion.",
-        a4: "Eres Growth Insights AI. Cruza datos de campanas y funnel, detecta caidas de conversion y sugiere experimentos de mejora.",
-      };
-
-      const skillDetails = {
-        s1: {
-          nombre: "Web Navigator",
-          descripcion: "Ejecuta navegacion web automatizada con pasos auditables.",
-          casos: ["Completar formularios B2B", "Consulta de portales de proveedores", "Extraccion de datos de dashboards"],
-          uso: "12 agentes activos",
-        },
-        s2: {
-          nombre: "Document OCR",
-          descripcion: "Extrae texto y estructuras desde PDF, imagenes y escaneos.",
-          casos: ["Lectura de contratos", "Extraccion de facturas", "Indexacion documental"],
-          uso: "9 agentes activos",
-        },
-        s3: {
-          nombre: "Calendar Sync",
-          descripcion: "Sincroniza agenda, huecos y recordatorios de equipos.",
-          casos: ["Agendado automatico", "Recordatorios de SLA", "Bloqueo de reuniones"],
-          uso: "7 agentes activos",
-        },
-        s4: {
-          nombre: "Ticket Classifier",
-          descripcion: "Clasifica tickets por urgencia, categoria y probabilidad de escalado.",
-          casos: ["Triage inicial", "Deteccion de incidentes", "Priorizacion por impacto"],
-          uso: "5 agentes activos",
-        },
-      };
-
-      const contractDetails = {
-        c1: {
-          cliente: "Acme Logistics",
-          agente: "FinOps Copilot",
-          periodo: "2026-01-01 a 2026-06-30",
-          total: "USD 14,900.00",
-          skills: [
-            { nombre: "Web Navigator", precio: "USD 5,200.00" },
-            { nombre: "Invoice Reader", precio: "USD 4,700.00" },
-            { nombre: "Calendar Sync", precio: "USD 5,000.00" },
-          ],
-        },
-        c2: {
-          cliente: "Nova Retail",
-          agente: "Support Triage Bot",
-          periodo: "2025-10-15 a 2026-04-15",
-          total: "USD 9,800.00",
-          skills: [
-            { nombre: "Ticket Classifier", precio: "USD 4,600.00" },
-            { nombre: "CRM Writer", precio: "USD 5,200.00" },
-          ],
-        },
-        c3: {
-          cliente: "Altair Legal",
-          agente: "Legal Draft Assistant",
-          periodo: "2026-03-01 a 2026-12-31",
-          total: "USD 18,200.00",
-          skills: [
-            { nombre: "Document OCR", precio: "USD 8,100.00" },
-            { nombre: "Clause Checker", precio: "USD 10,100.00" },
-          ],
-        },
-        c4: {
-          cliente: "Zenit Media",
-          agente: "Growth Insights AI",
-          periodo: "2025-08-01 a 2026-02-01",
-          total: "USD 11,400.00",
-          skills: [
-            { nombre: "Web Analytics", precio: "USD 6,300.00" },
-            { nombre: "Lead Enrichment", precio: "USD 5,100.00" },
-          ],
-        },
-      };
-
-      const errorDetails = {
-        e1: "Traceback: TimeoutError at module clause_verifier.ts line 219. Se excedio el SLA de validacion de clausulas para lote premium.",
-        e2: "Warning: CRM sync latency above threshold. Integracion responde en 3.8s promedio durante los ultimos 10 minutos.",
-        e3: "Error: Invoice parser returned malformed payload. Campo tax_id ausente en documento escaneado.",
-        e4: "Warning: Data source unavailable. Endpoint /traffic/source retornando 503 intermitente.",
-        e5: "Critical: Worker memory exceeded 1024MB. Job aborted to prevent node crash.",
-        e6: "Error: Webhook delivery failed with 502 Bad Gateway from upstream ticket gateway.",
-      };
-
-      const navButtons = document.querySelectorAll(".nav-item");
-      const views = document.querySelectorAll(".view");
-      const sectionTitle = document.getElementById("sectionTitle");
-      const sidebar = document.getElementById("sidebar");
-      const sidebarBackdrop = document.getElementById("sidebarBackdrop");
-      const openSidebarBtn = document.getElementById("openSidebarBtn");
-      const closeSidebarBtn = document.getElementById("closeSidebarBtn");
-
-      const modal = document.getElementById("modal");
-      const modalTitle = document.getElementById("modalTitle");
-      const modalBody = document.getElementById("modalBody");
-      const modalCloseBtn = document.getElementById("modalCloseBtn");
-      const modalFooterCloseBtn = document.getElementById("modalFooterCloseBtn");
-
-      const toast = document.getElementById("toast");
-      let toastTimer = null;
-      let activeDropdown = null;
-
-      function formatNavState(activeSection) {
-        navButtons.forEach((btn) => {
-          const isActive = btn.dataset.section === activeSection;
-          btn.classList.toggle("bg-cyan-600", isActive);
-          btn.classList.toggle("text-white", isActive);
-          btn.classList.toggle("shadow", isActive);
-          btn.classList.toggle("hover:bg-cyan-700", isActive);
-          btn.classList.toggle("text-slate-700", !isActive);
-          btn.classList.toggle("dark:text-slate-300", !isActive);
-          btn.classList.toggle("hover:bg-slate-100", !isActive);
-          btn.classList.toggle("dark:hover:bg-slate-800", !isActive);
-        });
+      function formatMoney(value) {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2,
+        }).format(value);
       }
 
-      function showSection(sectionKey) {
-        views.forEach((view) => {
-          view.classList.toggle("hidden", view.dataset.view !== sectionKey);
-        });
-        sectionTitle.textContent = sections[sectionKey];
-        formatNavState(sectionKey);
-        closeAllDropdowns();
-        closeSidebar();
+      function planBadge(plan) {
+        if (plan === "Enterprise") return "bg-amber-800/60 text-amber-100";
+        if (plan === "Pro") return "bg-sky-800/60 text-sky-100";
+        return "bg-slate-200 text-slate-800";
       }
 
-      function openSidebar() {
-        sidebar.classList.remove("-translate-x-full");
-        sidebarBackdrop.classList.remove("hidden");
+      function statusBadge(status) {
+        if (status === "Activo") return "bg-emerald-900/40 text-emerald-300";
+        if (status === "Suspendido") return "bg-rose-200 text-rose-700";
+        if (status === "Inactivo") return "bg-slate-700 text-slate-200";
+        if (status === "Fallando") return "bg-rose-200 text-rose-700";
+        return "bg-amber-800/60 text-amber-100";
       }
 
-      function closeSidebar() {
-        sidebar.classList.add("-translate-x-full");
-        sidebarBackdrop.classList.add("hidden");
+      function severityBadge(severity) {
+        if (severity === "Critico") return "bg-rose-900/60 text-rose-200";
+        if (severity === "Error") return "bg-amber-900/60 text-amber-200";
+        return "bg-lime-900/60 text-lime-200";
+      }
+
+      function contractStatusBadge(status) {
+        if (status === "Ongoing") return "text-cyan-300";
+        if (status === "Completed") return "text-slate-300";
+        return "text-amber-300";
+      }
+
+      function dropdownTrigger(id) {
+        return `<button data-dropdown-toggle="${id}" class="rounded px-2 py-1 text-slate-400 hover:bg-slate-700" aria-label="Abrir acciones">⋮</button>`;
+      }
+
+      function renderUsers() {
+        const tbody = document.getElementById("usersTableBody");
+        tbody.innerHTML = users
+          .map((user) => {
+            const menuId = `menu-user-${user.id}`;
+            return `
+              <tr>
+                <td class="px-4 py-3">${user.name}</td>
+                <td class="px-4 py-3 text-slate-400">${user.email}</td>
+                <td class="px-4 py-3"><span class="rounded px-2 py-1 text-[11px] uppercase ${planBadge(user.plan)}">${user.plan}</span></td>
+                <td class="px-4 py-3"><span class="rounded px-2 py-1 text-[11px] uppercase ${statusBadge(user.status)}">${user.status}</span></td>
+                <td class="relative px-4 py-3 text-right">
+                  ${dropdownTrigger(menuId)}
+                  <div id="${menuId}" class="dropdown-menu absolute right-2 top-11 z-10 hidden w-40 rounded border border-slate-700 bg-[#242637] p-1">
+                    <button data-action="user-detail" data-id="${user.id}" class="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-700">Ver detalle</button>
+                    <button data-action="user-delete" data-id="${user.id}" class="block w-full rounded px-3 py-2 text-left text-sm text-rose-300 hover:bg-rose-900/30">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      function renderAgents() {
+        const list = document.getElementById("agentsList");
+        list.innerHTML = agents
+          .map((agent) => {
+            const menuId = `menu-agent-${agent.id}`;
+            const skillsId = `agent-skills-${agent.id}`;
+            return `
+              <article class="rounded-lg border border-slate-700 bg-[#020f31] p-3">
+                <div class="mb-3 flex items-start justify-between gap-3">
+                  <div>
+                    <p class="text-lg font-semibold text-slate-100">${agent.name}</p>
+                    <p class="text-sm text-slate-400">Owner: ${agent.owner}</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="rounded-full px-2 py-1 text-xs ${statusBadge(agent.status)}">${agent.status}</span>
+                    <div class="relative">
+                      ${dropdownTrigger(menuId)}
+                      <div id="${menuId}" class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded border border-slate-700 bg-[#242637] p-1">
+                        <button data-action="agent-config" data-id="${agent.id}" class="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-700">Configurar</button>
+                        <button data-action="agent-delete" data-id="${agent.id}" class="block w-full rounded px-3 py-2 text-left text-sm text-rose-300 hover:bg-rose-900/30">Eliminar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 rounded border border-slate-600 bg-slate-700/40 px-2 py-2 text-xs text-slate-300">
+                  <div>
+                    <p class="text-[10px] uppercase text-slate-400">Uptime</p>
+                    <p class="text-sm">${agent.uptime}</p>
+                  </div>
+                  <div>
+                    <p class="text-[10px] uppercase text-slate-400">Tasks/Hr</p>
+                    <p class="text-sm">${agent.tasks}</p>
+                  </div>
+                  <div>
+                    <p class="text-[10px] uppercase text-slate-400">Version</p>
+                    <p class="text-sm">${agent.version}</p>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <button data-action="toggle-skills" data-target="${skillsId}" class="text-xs text-slate-300">Capabilities (${agent.skills.length})</button>
+                  <div id="${skillsId}" class="mt-2 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
+                    <div class="flex flex-wrap gap-2">
+                      ${agent.skills.map((skill) => `<span class="rounded bg-slate-700 px-2 py-1 text-xs text-slate-200">${skill}</span>`).join("")}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderSkills() {
+        const grid = document.getElementById("skillsGrid");
+        grid.innerHTML = skills
+          .map((skill) => {
+            const menuId = `menu-skill-${skill.id}`;
+            return `
+              <article class="rounded-lg border border-slate-700 bg-[#2b2d3c] p-3">
+                <div class="mb-2 flex items-start justify-between gap-2">
+                  <h4 class="text-3xl font-semibold text-slate-100">${skill.name}</h4>
+                  <div class="relative">
+                    ${dropdownTrigger(menuId)}
+                    <div id="${menuId}" class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded border border-slate-700 bg-[#242637] p-1">
+                      <button data-action="skill-detail" data-id="${skill.id}" class="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-700">Ver detalle</button>
+                      <button data-action="skill-delete" data-id="${skill.id}" class="block w-full rounded px-3 py-2 text-left text-sm text-rose-300 hover:bg-rose-900/30">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+                <p class="mb-3 text-sm text-slate-300">${skill.description}</p>
+                <div class="flex items-center justify-between border-t border-slate-700 pt-2 text-xs text-slate-300">
+                  <span>Used by ${skill.usage} agents</span>
+                  <span class="rounded bg-slate-200 px-2 py-1 text-slate-800">${skill.label}</span>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderContracts() {
+        const tbody = document.getElementById("contractsTableBody");
+        tbody.innerHTML = contracts
+          .map((contract) => {
+            const menuId = `menu-contract-${contract.id}`;
+            return `
+              <tr>
+                <td class="px-3 py-3">${contract.client}</td>
+                <td class="px-3 py-3 text-slate-300">${contract.agent}</td>
+                <td class="px-3 py-3">${contract.skills.map((s) => `<span class="mr-1 inline-flex rounded bg-slate-700 px-2 py-1 text-xs text-slate-200">${s}</span>`).join("")}</td>
+                <td class="px-3 py-3"><p>${contract.duration}</p><p class="text-xs ${contractStatusBadge(contract.status)}">● ${contract.status}</p></td>
+                <td class="px-3 py-3">${formatMoney(contract.total)}</td>
+                <td class="relative px-3 py-3 text-right">
+                  ${dropdownTrigger(menuId)}
+                  <div id="${menuId}" class="dropdown-menu absolute right-0 top-10 z-10 hidden w-40 rounded border border-slate-700 bg-[#242637] p-1">
+                    <button data-action="contract-detail" data-id="${contract.id}" class="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-700">Ver detalle</button>
+                    <button data-action="contract-delete" data-id="${contract.id}" class="block w-full rounded px-3 py-2 text-left text-sm text-rose-300 hover:bg-rose-900/30">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      function renderErrors() {
+        const tbody = document.getElementById("errorsTableBody");
+        tbody.innerHTML = errors
+          .map((error) => {
+            const resolved = !!state.resolvedErrors[error.id];
+            const menuId = `menu-error-${error.id}`;
+            return `
+              <tr class="${resolved ? "opacity-60" : ""}">
+                <td class="px-4 py-3 text-xs">${error.timestamp}</td>
+                <td class="px-4 py-3"><span class="rounded-full px-2 py-1 text-[11px] ${resolved ? "bg-emerald-900/40 text-emerald-300" : severityBadge(error.severity)}">${resolved ? "Resuelto" : error.severity}</span></td>
+                <td class="px-4 py-3">${error.agentId}</td>
+                <td class="px-4 py-3 text-amber-200">${error.type}</td>
+                <td class="px-4 py-3 text-slate-300">${error.description}</td>
+                <td class="relative px-4 py-3 text-right">
+                  ${dropdownTrigger(menuId)}
+                  <div id="${menuId}" class="dropdown-menu absolute right-0 top-10 z-10 hidden w-48 rounded border border-slate-700 bg-[#242637] p-1">
+                    <button data-action="error-detail" data-id="${error.id}" class="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-700">Ver detalle</button>
+                    <button data-action="error-resolve" data-id="${error.id}" class="block w-full rounded px-3 py-2 text-left text-sm text-emerald-300 hover:bg-emerald-900/30">Marcar como resuelto</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      function openModal(title, contentHtml) {
+        document.getElementById("modalTitle").textContent = title;
+        document.getElementById("modalContent").innerHTML = contentHtml;
+        const modal = document.getElementById("globalModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        state.modalOpen = true;
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("globalModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        state.modalOpen = false;
       }
 
       function showToast(message) {
+        const toast = document.getElementById("toast");
         toast.textContent = message;
         toast.classList.remove("hidden");
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toast.classList.add("hidden");
-        }, 2200);
+        setTimeout(() => toast.classList.add("hidden"), 1800);
       }
 
       function closeAllDropdowns() {
         document.querySelectorAll(".dropdown-menu").forEach((menu) => menu.classList.add("hidden"));
-        activeDropdown = null;
+        state.openDropdownId = null;
       }
 
-      function toggleDropdown(id) {
-        if (activeDropdown === id) {
-          closeAllDropdowns();
-          return;
-        }
-        closeAllDropdowns();
-        const menu = document.querySelector(`[data-dropdown-menu="${id}"]`);
-        if (menu) {
-          menu.classList.remove("hidden");
-          activeDropdown = id;
-        }
+      function updateSection(section) {
+        state.section = section;
+        document.querySelectorAll(".view").forEach((view) => {
+          view.classList.toggle("hidden", view.dataset.view !== section);
+        });
+
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          const active = item.dataset.section === section;
+          item.classList.toggle("bg-brand-600/30", active);
+          item.classList.toggle("text-indigo-300", active);
+          item.classList.toggle("text-slate-400", !active);
+          item.classList.toggle("hover:bg-slate-700/50", !active);
+        });
+
+        document.getElementById("sectionTitle").textContent = sectionTitles[section];
       }
 
-      function openModal(title, bodyHtml) {
-        modalTitle.textContent = title;
-        modalBody.innerHTML = bodyHtml;
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
+      function setTheme(theme) {
+        const dark = theme === "dark";
+        document.documentElement.classList.toggle("dark", dark);
+        localStorage.setItem("agenthub-theme", theme);
+        document.getElementById("themeText").textContent = dark ? "Modo claro" : "Modo oscuro";
       }
 
-      function closeModal() {
-        modal.classList.add("hidden");
-        modal.classList.remove("flex");
+      function initTheme() {
+        const savedTheme = localStorage.getItem("agenthub-theme") || "dark";
+        setTheme(savedTheme);
       }
 
-      function setupTheme() {
-        const themeToggle = document.getElementById("themeToggle");
-        const themeText = document.getElementById("themeText");
-        const themeIcon = document.getElementById("themeIcon");
-
-        const savedTheme = localStorage.getItem("agenthub-theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const useDark = savedTheme ? savedTheme === "dark" : prefersDark;
-
-        if (useDark) {
-          document.documentElement.classList.add("dark");
-        }
-
-        function renderThemeLabel() {
-          const darkOn = document.documentElement.classList.contains("dark");
-          themeText.textContent = darkOn ? "Modo claro" : "Modo oscuro";
-          themeIcon.textContent = darkOn ? "☀" : "🌙";
-        }
-
-        renderThemeLabel();
-
-        themeToggle.addEventListener("click", () => {
-          document.documentElement.classList.toggle("dark");
-          const darkOn = document.documentElement.classList.contains("dark");
-          localStorage.setItem("agenthub-theme", darkOn ? "dark" : "light");
-          renderThemeLabel();
-        });
+      function openSidebar() {
+        document.getElementById("sidebar").classList.remove("-translate-x-full");
+        document.getElementById("sidebarBackdrop").classList.remove("hidden");
       }
 
-      document.addEventListener("click", (event) => {
-        const toggleBtn = event.target.closest(".dropdown-toggle");
-        if (toggleBtn) {
-          toggleDropdown(toggleBtn.dataset.dropdown);
-          return;
-        }
+      function closeSidebar() {
+        document.getElementById("sidebar").classList.add("-translate-x-full");
+        document.getElementById("sidebarBackdrop").classList.add("hidden");
+      }
 
-        const clickedInsideDropdown = event.target.closest(".dropdown-menu");
-        if (!clickedInsideDropdown) {
+      function bindEvents() {
+        document.getElementById("sidebarNav").addEventListener("click", (event) => {
+          const button = event.target.closest("[data-section]");
+          if (!button) return;
           closeAllDropdowns();
-        }
-      });
-
-      document.querySelectorAll(".skill-toggle").forEach((button) => {
-        button.addEventListener("click", () => {
-          const target = document.getElementById(button.dataset.collapse);
-          if (!target) return;
-          const isExpanded = target.classList.contains("max-h-40");
-          target.classList.toggle("max-h-40", !isExpanded);
-          target.classList.toggle("opacity-100", !isExpanded);
-          target.classList.toggle("max-h-0", isExpanded);
-          target.classList.toggle("opacity-0", isExpanded);
-          button.textContent = isExpanded ? "Ver skills" : "Ocultar skills";
-        });
-      });
-
-      document.querySelectorAll(".action-view-user").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const user = userDetails[btn.dataset.userId];
-          if (!user) return;
-          openModal(
-            "Detalle de usuario",
-            `
-              <p><strong>Nombre:</strong> ${user.nombre}</p>
-              <p><strong>Email:</strong> ${user.email}</p>
-              <p><strong>Plan:</strong> ${user.plan}</p>
-              <p><strong>Estado:</strong> ${user.estado}</p>
-              <p><strong>Fecha de alta:</strong> ${user.alta}</p>
-              <p><strong>Notas:</strong> ${user.notas}</p>
-            `
-          );
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-config-agent").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const prompt = agentPrompts[btn.dataset.agentId];
-          if (!prompt) return;
-          openModal(
-            "Configuracion de agente",
-            `
-              <p class="text-sm text-slate-500 dark:text-slate-400">Prompt de sistema editable (UI-only):</p>
-              <textarea class="h-48 w-full rounded-lg border border-slate-300 bg-slate-50 p-3 font-mono text-xs text-slate-800 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">${prompt}</textarea>
-            `
-          );
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-view-skill").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const skill = skillDetails[btn.dataset.skillId];
-          if (!skill) return;
-          openModal(
-            `Detalle de skill: ${skill.nombre}`,
-            `
-              <p><strong>Descripcion:</strong> ${skill.descripcion}</p>
-              <p><strong>Uso actual:</strong> ${skill.uso}</p>
-              <p><strong>Casos de uso:</strong></p>
-              <ul class="list-disc space-y-1 pl-5">
-                ${skill.casos.map((item) => `<li>${item}</li>`).join("")}
-              </ul>
-            `
-          );
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-view-contract").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const contract = contractDetails[btn.dataset.contractId];
-          if (!contract) return;
-          openModal(
-            "Detalle de contrato",
-            `
-              <p><strong>Cliente:</strong> ${contract.cliente}</p>
-              <p><strong>Agente:</strong> ${contract.agente}</p>
-              <p><strong>Periodo:</strong> ${contract.periodo}</p>
-              <p><strong>Total pagado:</strong> ${contract.total}</p>
-              <div class="mt-3 rounded-lg border border-slate-200 p-3 dark:border-slate-700">
-                <p class="mb-2 font-semibold">Desglose de skills</p>
-                <ul class="space-y-2">
-                  ${contract.skills.map((skill) => `<li class="flex items-center justify-between"><span>${skill.nombre}</span><span class="font-medium">${skill.precio}</span></li>`).join("")}
-                </ul>
-              </div>
-            `
-          );
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-view-error").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const detail = errorDetails[btn.dataset.errorId];
-          if (!detail) return;
-          openModal("Traza completa del error", `<pre class="overflow-auto rounded-lg bg-slate-100 p-3 text-xs dark:bg-slate-950">${detail}</pre>`);
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-resolve-error").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const row = document.querySelector(`tr[data-error-id="${btn.dataset.errorId}"]`);
-          if (!row) return;
-          const statusBadge = row.querySelector(".error-status");
-          if (statusBadge) {
-            statusBadge.textContent = "Resuelto";
-            statusBadge.classList.remove("bg-amber-100", "text-amber-700", "dark:bg-amber-900/50", "dark:text-amber-300");
-            statusBadge.classList.add("bg-emerald-100", "text-emerald-700", "dark:bg-emerald-900/50", "dark:text-emerald-300");
-          }
-          showToast("Error marcado como resuelto (UI-only)");
-          closeAllDropdowns();
-        });
-      });
-
-      document.querySelectorAll(".action-delete").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          showToast(`${btn.dataset.entity} eliminado (simulado)`);
-          closeAllDropdowns();
-        });
-      });
-
-      navButtons.forEach((btn) => {
-        btn.addEventListener("click", () => showSection(btn.dataset.section));
-      });
-
-      modalCloseBtn.addEventListener("click", closeModal);
-      modalFooterCloseBtn.addEventListener("click", closeModal);
-      modal.addEventListener("click", (event) => {
-        if (event.target === modal) closeModal();
-      });
-
-      openSidebarBtn.addEventListener("click", openSidebar);
-      closeSidebarBtn.addEventListener("click", closeSidebar);
-      sidebarBackdrop.addEventListener("click", closeSidebar);
-
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          closeModal();
-          closeAllDropdowns();
+          updateSection(button.dataset.section);
           closeSidebar();
-        }
-      });
+        });
 
-      setupTheme();
-      showSection("dashboard");
-    </script>
-  </body>
-</html>
-<!doctype html>
-<html lang="es" class="h-full">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgentHub Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script>
-    tailwind = window.tailwind || {};
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          boxShadow: {
-            card: "0 14px 35px -18px rgb(15 23 42 / 0.35)",
-          },
-        },
-      },
-    };
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="h-full bg-slate-100 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
-  <div class="min-h-screen">
-    <div id="sidebarOverlay" class="fixed inset-0 z-30 hidden bg-slate-950/45 md:hidden"></div>
+        document.getElementById("themeToggle").addEventListener("click", () => {
+          const isDark = document.documentElement.classList.contains("dark");
+          setTheme(isDark ? "light" : "dark");
+        });
 
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full border-r border-slate-200 bg-white px-4 py-6 transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 md:translate-x-0">
-      <div class="mb-8 flex items-center gap-3">
-        <div class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:bg-emerald-400/15 dark:text-emerald-300">
-          <span class="text-lg font-bold">AI</span>
-        </div>
-        <div>
-          <p class="font-['Space_Grotesk'] text-lg font-semibold tracking-tight">AgentHub</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Panel interno</p>
-        </div>
-      </div>
+        document.getElementById("openSidebarBtn").addEventListener("click", openSidebar);
+        document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
+        document.getElementById("sidebarBackdrop").addEventListener("click", closeSidebar);
 
-      <nav id="mainNav" class="space-y-2">
-        <button data-section="dashboard" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Dashboard</span>
-          <span class="text-xs text-slate-400">01</span>
-        </button>
-        <button data-section="usuarios" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Gestion de usuarios</span>
-          <span class="text-xs text-slate-400">02</span>
-        </button>
-        <button data-section="agentes" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Gestion de agentes</span>
-          <span class="text-xs text-slate-400">03</span>
-        </button>
-        <button data-section="skills" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Skills</span>
-          <span class="text-xs text-slate-400">04</span>
-        </button>
-        <button data-section="contratos" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Contrataciones</span>
-          <span class="text-xs text-slate-400">05</span>
-        </button>
-        <button data-section="errores" class="nav-item flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-medium transition hover:bg-slate-100 dark:hover:bg-slate-800">
-          <span>Log de errores</span>
-          <span class="text-xs text-slate-400">06</span>
-        </button>
-      </nav>
-    </aside>
+        document.addEventListener("click", (event) => {
+          const toggle = event.target.closest("[data-dropdown-toggle]");
+          const inMenu = event.target.closest(".dropdown-menu");
 
-    <main class="md:ml-72">
-      <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
-        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center gap-3">
-            <button id="openSidebar" class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 text-slate-700 dark:border-slate-700 dark:text-slate-200 md:hidden" aria-label="Abrir navegacion">
-              <span class="text-lg">=</span>
-            </button>
-            <div>
-              <p class="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">AgentHub Admin</p>
-              <h1 id="sectionTitle" class="font-['Space_Grotesk'] text-xl font-semibold tracking-tight">Dashboard</h1>
-            </div>
-          </div>
-
-          <button id="themeToggle" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800" aria-label="Cambiar tema">
-            <span id="themeIcon">Moon</span>
-            <span id="themeLabel">Modo oscuro</span>
-          </button>
-        </div>
-      </header>
-
-      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <section data-view="dashboard" class="view-section space-y-6">
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <article class="rounded-2xl border border-emerald-200 bg-white p-5 shadow-card transition hover:-translate-y-1 dark:border-emerald-700/50 dark:bg-slate-900">
-              <p class="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Ingresos del mes</p>
-              <p class="mt-3 font-['Space_Grotesk'] text-3xl font-semibold">USD 128,450.00</p>
-            </article>
-            <article class="rounded-2xl border border-amber-200 bg-white p-5 shadow-card transition hover:-translate-y-1 dark:border-amber-700/50 dark:bg-slate-900">
-              <p class="text-xs font-medium uppercase tracking-wide text-amber-700 dark:text-amber-300">Perdida por descuentos</p>
-              <p class="mt-3 font-['Space_Grotesk'] text-3xl font-semibold">USD 11,320.00</p>
-            </article>
-            <article class="rounded-2xl border border-sky-200 bg-white p-5 shadow-card transition hover:-translate-y-1 dark:border-sky-700/50 dark:bg-slate-900">
-              <p class="text-xs font-medium uppercase tracking-wide text-sky-700 dark:text-sky-300">Agentes activos</p>
-              <p class="mt-3 font-['Space_Grotesk'] text-3xl font-semibold">237</p>
-            </article>
-            <article class="rounded-2xl border border-rose-200 bg-white p-5 shadow-card transition hover:-translate-y-1 dark:border-rose-700/50 dark:bg-slate-900">
-              <p class="text-xs font-medium uppercase tracking-wide text-rose-700 dark:text-rose-300">Agentes fallando</p>
-              <p class="mt-3 font-['Space_Grotesk'] text-3xl font-semibold">9</p>
-            </article>
-          </div>
-
-          <div class="grid min-h-72 place-items-center rounded-2xl border-2 border-dashed border-slate-300 bg-white px-6 text-center dark:border-slate-700 dark:bg-slate-900">
-            <div>
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Actividad semanal</p>
-              <p class="mt-2 font-['Space_Grotesk'] text-2xl font-medium">Placeholder de grafico</p>
-            </div>
-          </div>
-        </section>
-
-        <section data-view="usuarios" class="view-section hidden space-y-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-left text-sm">
-                <thead>
-                  <tr class="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                    <th class="px-3 py-3 font-medium">Nombre</th>
-                    <th class="px-3 py-3 font-medium">Email</th>
-                    <th class="px-3 py-3 font-medium">Plan</th>
-                    <th class="px-3 py-3 font-medium">Estado</th>
-                    <th class="px-3 py-3 font-medium text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="usersTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section data-view="agentes" class="view-section hidden space-y-4">
-          <div id="agentsList" class="grid grid-cols-1 gap-4"></div>
-        </section>
-
-        <section data-view="skills" class="view-section hidden space-y-6">
-          <div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 dark:border-indigo-800 dark:bg-indigo-900/20">
-            <p class="text-sm leading-relaxed text-indigo-900 dark:text-indigo-200">
-              En AgentHub, una skill es una capacidad modular reutilizable que amplifica lo que un agente puede hacer, como navegar web, leer documentos, analizar datos o coordinar agendas.
-            </p>
-          </div>
-          <div id="skillsGrid" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
-        </section>
-
-        <section data-view="contratos" class="view-section hidden space-y-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-left text-sm">
-                <thead>
-                  <tr class="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                    <th class="px-3 py-3 font-medium">Cliente</th>
-                    <th class="px-3 py-3 font-medium">Agente</th>
-                    <th class="px-3 py-3 font-medium">Skills</th>
-                    <th class="px-3 py-3 font-medium">Fechas</th>
-                    <th class="px-3 py-3 font-medium">Importe</th>
-                    <th class="px-3 py-3 font-medium text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="contractsTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section data-view="errores" class="view-section hidden space-y-4">
-          <div class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-left text-sm">
-                <thead>
-                  <tr class="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                    <th class="px-3 py-3 font-medium">Timestamp</th>
-                    <th class="px-3 py-3 font-medium">Agente</th>
-                    <th class="px-3 py-3 font-medium">Tipo</th>
-                    <th class="px-3 py-3 font-medium">Descripcion</th>
-                    <th class="px-3 py-3 font-medium text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="errorsTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <div id="globalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/55 px-4 py-8">
-    <div class="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
-      <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
-        <h2 id="modalTitle" class="font-['Space_Grotesk'] text-lg font-semibold">Detalle</h2>
-        <button id="closeModal" class="rounded-lg border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700">Cerrar</button>
-      </div>
-      <div id="modalContent" class="max-h-[70vh] overflow-auto px-6 py-5 text-sm"></div>
-    </div>
-  </div>
-
-  <div id="toast" class="pointer-events-none fixed bottom-6 right-6 z-50 hidden rounded-xl border border-emerald-200 bg-white px-4 py-3 text-sm font-medium text-emerald-700 shadow-card dark:border-emerald-800 dark:bg-slate-900 dark:text-emerald-300"></div>
-
-  <script>
-    const state = {
-      currentSection: "dashboard",
-      openDropdownId: null,
-      openModal: false,
-      resolvedErrors: {},
-    };
-
-    const users = [
-      {
-        id: 1,
-        name: "Laura Campos",
-        email: "laura.campos@acme.io",
-        plan: "Enterprise",
-        status: "Activo",
-        joinedAt: "2026-01-17",
-        notes: "Admin global con permisos para facturacion y agentes.",
-      },
-      { id: 2, name: "Mateo Rios", email: "mateo.rios@acme.io", plan: "Pro", status: "Activo", joinedAt: "2026-02-03", notes: "Gestiona operaciones de usuarios y monitoreo." },
-      { id: 3, name: "Clara Ortiz", email: "clara.ortiz@north.ai", plan: "Pro", status: "Pendiente", joinedAt: "2026-03-09", notes: "Pendiente de validar dominio corporativo." },
-      { id: 4, name: "Nicolas Vega", email: "nicolas.vega@opsworks.ai", plan: "Starter", status: "Inactivo", joinedAt: "2025-12-29", notes: "Cuenta pausada por cambios de presupuesto." },
-      { id: 5, name: "Renata Flores", email: "renata.flores@globex.io", plan: "Enterprise", status: "Activo", joinedAt: "2026-01-24", notes: "Coordina despliegues multiagente en 3 regiones." },
-      { id: 6, name: "Ivan Morales", email: "ivan.morales@meridian.ai", plan: "Pro", status: "Activo", joinedAt: "2026-04-12", notes: "Usuario tecnico para configuracion avanzada." },
-    ];
-
-    const agents = [
-      {
-        id: 1,
-        name: "Sales Scout",
-        owner: "Laura Campos",
-        status: "Activo",
-        skills: ["Web Navigator", "CRM Sync", "Meeting Planner"],
-        prompt: "Eres Sales Scout. Prioriza leads con score alto, resume cada hallazgo y propone proximos pasos accionables.",
-      },
-      {
-        id: 2,
-        name: "Ops Sentinel",
-        owner: "Mateo Rios",
-        status: "Fallando",
-        skills: ["Log Reader", "Incident Triage", "Alert Routing"],
-        prompt: "Eres Ops Sentinel. Detecta anomalias en ejecucion, clasifica severidad y sugiere mitigaciones inmediatas.",
-      },
-      {
-        id: 3,
-        name: "Doc Pilot",
-        owner: "Renata Flores",
-        status: "Activo",
-        skills: ["PDF Parser", "Knowledge Retriever", "Summary Builder"],
-        prompt: "Eres Doc Pilot. Lee documentos largos, extrae hechos clave y responde con fuentes verificables.",
-      },
-      {
-        id: 4,
-        name: "Calendar Flow",
-        owner: "Ivan Morales",
-        status: "Inactivo",
-        skills: ["Calendar Manager", "Timezone Resolver", "Reminder Engine"],
-        prompt: "Eres Calendar Flow. Organiza agendas complejas y evita conflictos entre equipos en diferentes zonas horarias.",
-      },
-    ];
-
-    const skills = [
-      {
-        id: 1,
-        name: "Web Navigator",
-        description: "Permite al agente investigar sitios web y capturar datos estructurados.",
-        usageCount: 18,
-        detail: "Ideal para monitoreo competitivo, prospeccion comercial y validacion de fuentes publicas en tiempo real.",
-      },
-      {
-        id: 2,
-        name: "Document Reader",
-        description: "Procesa PDFs, DOCX y bases de conocimiento para extraer informacion util.",
-        usageCount: 24,
-        detail: "Acelera onboardings y consultas internas al convertir documentos extensos en respuestas claras y trazables.",
-      },
-      {
-        id: 3,
-        name: "Calendar Manager",
-        description: "Coordina reuniones, reprogramaciones y recordatorios entre equipos.",
-        usageCount: 11,
-        detail: "Reduce conflictos de agenda y automatiza la coordinacion de eventos para operaciones distribuidas.",
-      },
-      {
-        id: 4,
-        name: "Incident Triage",
-        description: "Clasifica errores operativos y sugiere rutas de resolucion por severidad.",
-        usageCount: 9,
-        detail: "Clave para equipos de soporte, detecta patrones de fallo y prioriza acciones criticas.",
-      },
-    ];
-
-    const contracts = [
-      {
-        id: 1,
-        client: "Northwind Labs",
-        agent: "Sales Scout",
-        skills: ["Web Navigator", "CRM Sync"],
-        startDate: "2026-01-01",
-        endDate: "2026-12-31",
-        amount: 28500,
-        breakdown: [
-          { skill: "Web Navigator", price: 9800 },
-          { skill: "CRM Sync", price: 6200 },
-          { skill: "Licencia base agente", price: 12500 },
-        ],
-      },
-      {
-        id: 2,
-        client: "Globex Corp",
-        agent: "Doc Pilot",
-        skills: ["Document Reader", "Knowledge Retriever"],
-        startDate: "2026-02-15",
-        endDate: "2026-08-15",
-        amount: 16400,
-        breakdown: [
-          { skill: "Document Reader", price: 5400 },
-          { skill: "Knowledge Retriever", price: 4500 },
-          { skill: "Licencia base agente", price: 6500 },
-        ],
-      },
-      {
-        id: 3,
-        client: "Apex Logistics",
-        agent: "Calendar Flow",
-        skills: ["Calendar Manager", "Reminder Engine"],
-        startDate: "2025-11-10",
-        endDate: "2026-11-10",
-        amount: 21990,
-        breakdown: [
-          { skill: "Calendar Manager", price: 7900 },
-          { skill: "Reminder Engine", price: 4590 },
-          { skill: "Licencia base agente", price: 9500 },
-        ],
-      },
-      {
-        id: 4,
-        client: "Meridian Health",
-        agent: "Ops Sentinel",
-        skills: ["Incident Triage", "Alert Routing", "Log Reader"],
-        startDate: "2026-03-20",
-        endDate: "2026-09-20",
-        amount: 30250,
-        breakdown: [
-          { skill: "Incident Triage", price: 8500 },
-          { skill: "Alert Routing", price: 5600 },
-          { skill: "Log Reader", price: 6150 },
-          { skill: "Licencia base agente", price: 10000 },
-        ],
-      },
-    ];
-
-    const errors = [
-      { id: 1, timestamp: "2026-06-15 15:01", agent: "Ops Sentinel", severity: "Critico", description: "Timeout en pipeline de clasificacion.", trace: "Error: Request timeout after 30000ms at triageWorker.js:214" },
-      { id: 2, timestamp: "2026-06-15 14:32", agent: "Sales Scout", severity: "Warning", description: "Fuente web con esquema inesperado.", trace: "Warning: DOM selector missing at crawlStep.js:88" },
-      { id: 3, timestamp: "2026-06-15 13:58", agent: "Doc Pilot", severity: "Error", description: "Fallo al parsear PDF escaneado.", trace: "Error: OCR extraction failed at parser/pdfEngine.js:129" },
-      { id: 4, timestamp: "2026-06-15 13:20", agent: "Calendar Flow", severity: "Error", description: "Colision de horario en zona America/Bogota.", trace: "Error: Calendar conflict unresolved at scheduler.js:301" },
-      { id: 5, timestamp: "2026-06-15 12:47", agent: "Ops Sentinel", severity: "Critico", description: "Webhook de alertas no disponible.", trace: "Error: POST /alerts failed with 503 at notifier.js:77" },
-      { id: 6, timestamp: "2026-06-15 12:05", agent: "Doc Pilot", severity: "Warning", description: "Documento sin metadatos de version.", trace: "Warning: Metadata missing at ingest.js:41" },
-    ];
-
-    const sectionTitles = {
-      dashboard: "Dashboard",
-      usuarios: "Gestion de usuarios",
-      agentes: "Gestion de agentes",
-      skills: "Skills",
-      contratos: "Contrataciones de agentes",
-      errores: "Log de errores",
-    };
-
-    function formatMoney(value) {
-      return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(value);
-    }
-
-    function statusBadgeClass(status) {
-      if (status === "Activo") return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300";
-      if (status === "Inactivo") return "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200";
-      if (status === "Fallando") return "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300";
-      return "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300";
-    }
-
-    function severityBadgeClass(severity) {
-      if (severity === "Critico") return "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300";
-      if (severity === "Error") return "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300";
-      return "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300";
-    }
-
-    function dropdownButton(targetId) {
-      return `
-        <button data-dropdown-toggle="${targetId}" class="rounded-lg border border-slate-300 px-2 py-1 text-lg leading-none dark:border-slate-700" aria-label="Abrir acciones">...</button>
-      `;
-    }
-
-    function renderUsers() {
-      const tbody = document.getElementById("usersTableBody");
-      tbody.innerHTML = users.map((user) => {
-        const menuId = `menu-user-${user.id}`;
-        return `
-          <tr class="border-b border-slate-100 dark:border-slate-800/80">
-            <td class="px-3 py-3 font-medium">${user.name}</td>
-            <td class="px-3 py-3 text-slate-600 dark:text-slate-300">${user.email}</td>
-            <td class="px-3 py-3">${user.plan}</td>
-            <td class="px-3 py-3"><span class="rounded-full px-2.5 py-1 text-xs font-medium ${statusBadgeClass(user.status)}">${user.status}</span></td>
-            <td class="relative px-3 py-3 text-right">
-              ${dropdownButton(menuId)}
-              <div id="${menuId}" class="dropdown-menu absolute right-3 top-12 z-10 hidden w-40 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                <button data-action="user-detail" data-id="${user.id}" class="block w-full rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Ver detalle</button>
-                <button data-action="user-delete" data-id="${user.id}" class="block w-full rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20">Eliminar</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function renderAgents() {
-      const list = document.getElementById("agentsList");
-      list.innerHTML = agents.map((agent) => {
-        const menuId = `menu-agent-${agent.id}`;
-        const skillsId = `skills-agent-${agent.id}`;
-        return `
-          <article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h3 class="font-['Space_Grotesk'] text-lg font-semibold">${agent.name}</h3>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Propietario: ${agent.owner}</p>
-              </div>
-              <div class="relative">
-                ${dropdownButton(menuId)}
-                <div id="${menuId}" class="dropdown-menu absolute right-0 top-12 z-10 hidden w-44 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                  <button data-action="agent-config" data-id="${agent.id}" class="block w-full rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Configurar</button>
-                  <button data-action="agent-delete" data-id="${agent.id}" class="block w-full rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20">Eliminar</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-4 flex flex-wrap items-center gap-3">
-              <span class="rounded-full px-2.5 py-1 text-xs font-medium ${statusBadgeClass(agent.status)}">${agent.status}</span>
-              <button data-action="toggle-skills" data-target="${skillsId}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium dark:border-slate-700">Ver skills</button>
-            </div>
-
-            <div id="${skillsId}" class="mt-3 max-h-0 overflow-hidden opacity-0 transition-all duration-300">
-              <div class="flex flex-wrap gap-2 pt-2">
-                ${agent.skills.map((skill) => `<span class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs dark:bg-slate-800">${skill}</span>`).join("")}
-              </div>
-            </div>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function renderSkills() {
-      const grid = document.getElementById("skillsGrid");
-      grid.innerHTML = skills.map((skill) => {
-        const menuId = `menu-skill-${skill.id}`;
-        return `
-          <article class="relative rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <div class="mb-4 flex items-start justify-between gap-3">
-              <h3 class="font-['Space_Grotesk'] text-lg font-semibold">${skill.name}</h3>
-              <div class="relative">
-                ${dropdownButton(menuId)}
-                <div id="${menuId}" class="dropdown-menu absolute right-0 top-12 z-10 hidden w-40 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                  <button data-action="skill-detail" data-id="${skill.id}" class="block w-full rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Ver detalle</button>
-                  <button data-action="skill-delete" data-id="${skill.id}" class="block w-full rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20">Eliminar</button>
-                </div>
-              </div>
-            </div>
-            <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">${skill.description}</p>
-            <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Adopcion</p>
-            <p class="font-['Space_Grotesk'] text-2xl font-semibold">${skill.usageCount} agentes</p>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function renderContracts() {
-      const tbody = document.getElementById("contractsTableBody");
-      tbody.innerHTML = contracts.map((contract) => {
-        const menuId = `menu-contract-${contract.id}`;
-        return `
-          <tr class="border-b border-slate-100 dark:border-slate-800/80">
-            <td class="px-3 py-3 font-medium">${contract.client}</td>
-            <td class="px-3 py-3">${contract.agent}</td>
-            <td class="px-3 py-3 text-slate-600 dark:text-slate-300">${contract.skills.join(", ")}</td>
-            <td class="px-3 py-3 text-slate-600 dark:text-slate-300">${contract.startDate} - ${contract.endDate}</td>
-            <td class="px-3 py-3 font-medium">${formatMoney(contract.amount)}</td>
-            <td class="relative px-3 py-3 text-right">
-              ${dropdownButton(menuId)}
-              <div id="${menuId}" class="dropdown-menu absolute right-3 top-12 z-10 hidden w-40 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                <button data-action="contract-detail" data-id="${contract.id}" class="block w-full rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Ver detalle</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function renderErrors() {
-      const tbody = document.getElementById("errorsTableBody");
-      tbody.innerHTML = errors.map((error) => {
-        const menuId = `menu-error-${error.id}`;
-        const resolved = !!state.resolvedErrors[error.id];
-        return `
-          <tr class="border-b border-slate-100 dark:border-slate-800/80 ${resolved ? "opacity-65" : ""}">
-            <td class="px-3 py-3 text-xs sm:text-sm">${error.timestamp}</td>
-            <td class="px-3 py-3 font-medium">${error.agent}</td>
-            <td class="px-3 py-3">
-              <span class="rounded-full px-2.5 py-1 text-xs font-medium ${resolved ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : severityBadgeClass(error.severity)}">${resolved ? "Resuelto" : error.severity}</span>
-            </td>
-            <td class="px-3 py-3 text-slate-600 dark:text-slate-300">${error.description}</td>
-            <td class="relative px-3 py-3 text-right">
-              ${dropdownButton(menuId)}
-              <div id="${menuId}" class="dropdown-menu absolute right-3 top-12 z-10 hidden w-48 rounded-xl border border-slate-200 bg-white p-1.5 text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                <button data-action="error-detail" data-id="${error.id}" class="block w-full rounded-lg px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-800">Ver detalle</button>
-                <button data-action="error-resolve" data-id="${error.id}" class="block w-full rounded-lg px-3 py-2 text-sm text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/20">Marcar como resuelto</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
-
-    function closeAllDropdowns() {
-      document.querySelectorAll(".dropdown-menu").forEach((menu) => menu.classList.add("hidden"));
-      state.openDropdownId = null;
-    }
-
-    function openModal(title, htmlContent) {
-      document.getElementById("modalTitle").textContent = title;
-      document.getElementById("modalContent").innerHTML = htmlContent;
-      const modal = document.getElementById("globalModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-      state.openModal = true;
-    }
-
-    function closeModal() {
-      const modal = document.getElementById("globalModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      state.openModal = false;
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 1800);
-    }
-
-    function updateActiveSection(section) {
-      state.currentSection = section;
-      document.querySelectorAll(".view-section").forEach((el) => {
-        el.classList.toggle("hidden", el.dataset.view !== section);
-      });
-
-      document.querySelectorAll(".nav-item").forEach((item) => {
-        const isActive = item.dataset.section === section;
-        item.classList.toggle("bg-slate-900", isActive);
-        item.classList.toggle("text-white", isActive);
-        item.classList.toggle("dark:bg-emerald-500", isActive);
-      });
-
-      document.getElementById("sectionTitle").textContent = sectionTitles[section];
-    }
-
-    function setTheme(theme) {
-      const root = document.documentElement;
-      const isDark = theme === "dark";
-      root.classList.toggle("dark", isDark);
-      localStorage.setItem("agenthub-theme", theme);
-      document.getElementById("themeLabel").textContent = isDark ? "Modo claro" : "Modo oscuro";
-      document.getElementById("themeIcon").textContent = isDark ? "Sun" : "Moon";
-    }
-
-    function initTheme() {
-      const saved = localStorage.getItem("agenthub-theme");
-      if (saved) {
-        setTheme(saved);
-        return;
-      }
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setTheme(prefersDark ? "dark" : "light");
-    }
-
-    function closeMobileSidebar() {
-      document.getElementById("sidebar").classList.add("-translate-x-full");
-      document.getElementById("sidebarOverlay").classList.add("hidden");
-    }
-
-    function openMobileSidebar() {
-      document.getElementById("sidebar").classList.remove("-translate-x-full");
-      document.getElementById("sidebarOverlay").classList.remove("hidden");
-    }
-
-    function bindEvents() {
-      document.getElementById("mainNav").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-section]");
-        if (!button) return;
-        closeAllDropdowns();
-        updateActiveSection(button.dataset.section);
-        closeMobileSidebar();
-      });
-
-      document.getElementById("themeToggle").addEventListener("click", () => {
-        const darkEnabled = document.documentElement.classList.contains("dark");
-        setTheme(darkEnabled ? "light" : "dark");
-      });
-
-      document.getElementById("openSidebar").addEventListener("click", openMobileSidebar);
-      document.getElementById("sidebarOverlay").addEventListener("click", closeMobileSidebar);
-
-      document.addEventListener("click", (event) => {
-        const toggle = event.target.closest("[data-dropdown-toggle]");
-        const insideMenu = event.target.closest(".dropdown-menu");
-
-        if (toggle) {
-          const targetId = toggle.dataset.dropdownToggle;
-          const targetMenu = document.getElementById(targetId);
-          const shouldOpen = targetId !== state.openDropdownId;
-          closeAllDropdowns();
-          if (shouldOpen) {
-            targetMenu.classList.remove("hidden");
-            state.openDropdownId = targetId;
+          if (toggle) {
+            const id = toggle.dataset.dropdownToggle;
+            const menu = document.getElementById(id);
+            const shouldOpen = state.openDropdownId !== id;
+            closeAllDropdowns();
+            if (shouldOpen && menu) {
+              menu.classList.remove("hidden");
+              state.openDropdownId = id;
+            }
+            return;
           }
-          return;
-        }
 
-        if (!insideMenu) closeAllDropdowns();
+          if (!inMenu) closeAllDropdowns();
 
-        const actionButton = event.target.closest("[data-action]");
-        if (!actionButton) return;
+          const actionButton = event.target.closest("[data-action]");
+          if (!actionButton) return;
+          const action = actionButton.dataset.action;
+          const id = Number(actionButton.dataset.id);
 
-        const action = actionButton.dataset.action;
-        const id = Number(actionButton.dataset.id);
+          if (action === "toggle-skills") {
+            const panel = document.getElementById(actionButton.dataset.target);
+            const open = panel.classList.contains("max-h-32");
+            panel.classList.toggle("max-h-32", !open);
+            panel.classList.toggle("opacity-100", !open);
+            panel.classList.toggle("max-h-0", open);
+            panel.classList.toggle("opacity-0", open);
+          }
 
-        if (action === "user-detail") {
-          const user = users.find((item) => item.id === id);
-          openModal("Detalle de usuario", `
-            <div class="space-y-3">
-              <p><strong>Nombre:</strong> ${user.name}</p>
-              <p><strong>Email:</strong> ${user.email}</p>
-              <p><strong>Plan:</strong> ${user.plan}</p>
-              <p><strong>Estado:</strong> ${user.status}</p>
-              <p><strong>Fecha de alta:</strong> ${user.joinedAt}</p>
-              <p><strong>Notas:</strong> ${user.notes}</p>
-            </div>
-          `);
-        }
+          if (action === "user-detail") {
+            const user = users.find((u) => u.id === id);
+            openModal(
+              "Detalle de usuario",
+              `
+              <div class="space-y-2">
+                <p><strong>Nombre:</strong> ${user.name}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Plan:</strong> ${user.plan}</p>
+                <p><strong>Estado:</strong> ${user.status}</p>
+                <p><strong>Fecha de alta:</strong> ${user.joinedAt}</p>
+                <p><strong>Notas:</strong> ${user.notes}</p>
+              </div>
+            `
+            );
+          }
 
-        if (action === "user-delete") {
-          showToast("Usuario marcado para eliminacion (UI only)");
-        }
+          if (action === "agent-config") {
+            const agent = agents.find((a) => a.id === id);
+            openModal(
+              "Configurar agente",
+              `
+              <div class="space-y-3">
+                <p><strong>Agente:</strong> ${agent.name}</p>
+                <label class="block text-xs uppercase text-slate-400">Prompt del sistema</label>
+                <textarea class="min-h-44 w-full rounded border border-slate-600 bg-slate-900 p-3 font-mono text-xs text-slate-100">${agent.prompt}</textarea>
+              </div>
+            `
+            );
+          }
 
-        if (action === "agent-config") {
-          const agent = agents.find((item) => item.id === id);
-          openModal("Configurar agente", `
-            <div class="space-y-4">
-              <p><strong>Agente:</strong> ${agent.name}</p>
-              <label class="block text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Prompt del sistema</label>
-              <textarea class="min-h-40 w-full rounded-xl border border-slate-300 bg-white p-3 font-['IBM_Plex_Mono'] text-xs leading-relaxed dark:border-slate-700 dark:bg-slate-950">${agent.prompt}</textarea>
-            </div>
-          `);
-        }
+          if (action === "skill-detail") {
+            const skill = skills.find((s) => s.id === id);
+            openModal(
+              "Detalle de skill",
+              `
+              <div class="space-y-2">
+                <p><strong>Skill:</strong> ${skill.name}</p>
+                <p><strong>Descripcion:</strong> ${skill.description}</p>
+                <p><strong>Uso actual:</strong> ${skill.usage} agentes</p>
+                <p><strong>Casos de uso:</strong> ${skill.detail}</p>
+              </div>
+            `
+            );
+          }
 
-        if (action === "agent-delete") {
-          showToast("Agente marcado para eliminacion (UI only)");
-        }
-
-        if (action === "toggle-skills") {
-          const panel = document.getElementById(actionButton.dataset.target);
-          const expanded = panel.classList.contains("max-h-80");
-          panel.classList.toggle("max-h-80", !expanded);
-          panel.classList.toggle("opacity-100", !expanded);
-          panel.classList.toggle("max-h-0", expanded);
-          panel.classList.toggle("opacity-0", expanded);
-        }
-
-        if (action === "skill-detail") {
-          const skill = skills.find((item) => item.id === id);
-          openModal("Detalle de skill", `
-            <div class="space-y-3">
-              <p><strong>Skill:</strong> ${skill.name}</p>
-              <p><strong>Descripcion:</strong> ${skill.description}</p>
-              <p><strong>Casos de uso:</strong> ${skill.detail}</p>
-              <p><strong>Uso actual:</strong> ${skill.usageCount} agentes habilitados.</p>
-            </div>
-          `);
-        }
-
-        if (action === "skill-delete") {
-          showToast("Skill marcada para eliminacion (UI only)");
-        }
-
-        if (action === "contract-detail") {
-          const contract = contracts.find((item) => item.id === id);
-          openModal("Detalle de contrato", `
-            <div class="space-y-4">
-              <p><strong>Cliente:</strong> ${contract.client}</p>
-              <p><strong>Agente:</strong> ${contract.agent}</p>
-              <p><strong>Vigencia:</strong> ${contract.startDate} al ${contract.endDate}</p>
-              <p><strong>Total pagado:</strong> ${formatMoney(contract.amount)}</p>
-              <div>
-                <p class="mb-2 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Desglose de skills y conceptos</p>
-                <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
-                  ${contract.breakdown.map((row) => `
-                    <div class="flex items-center justify-between border-b border-slate-100 px-4 py-2 text-sm last:border-b-0 dark:border-slate-800">
-                      <span>${row.skill}</span>
+          if (action === "contract-detail") {
+            const contract = contracts.find((c) => c.id === id);
+            openModal(
+              "Detalle de contrato",
+              `
+              <div class="space-y-3">
+                <p><strong>Cliente:</strong> ${contract.client}</p>
+                <p><strong>Agente:</strong> ${contract.agent}</p>
+                <p><strong>Duracion:</strong> ${contract.duration}</p>
+                <p><strong>Total:</strong> ${formatMoney(contract.total)}</p>
+                <div class="rounded border border-slate-700">
+                  ${contract.breakdown
+                    .map(
+                      (row) => `
+                    <div class="flex items-center justify-between border-b border-slate-800 px-3 py-2 last:border-b-0">
+                      <span>${row.name}</span>
                       <strong>${formatMoney(row.price)}</strong>
                     </div>
-                  `).join("")}
+                  `
+                    )
+                    .join("")}
                 </div>
               </div>
-            </div>
-          `);
-        }
+            `
+            );
+          }
 
-        if (action === "error-detail") {
-          const error = errors.find((item) => item.id === id);
-          openModal("Traza completa de error", `
-            <div class="space-y-3">
-              <p><strong>Timestamp:</strong> ${error.timestamp}</p>
-              <p><strong>Agente:</strong> ${error.agent}</p>
-              <p><strong>Severidad:</strong> ${error.severity}</p>
-              <p><strong>Descripcion:</strong> ${error.description}</p>
-              <label class="block text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Stack trace</label>
-              <pre class="overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-3 font-['IBM_Plex_Mono'] text-xs dark:border-slate-700 dark:bg-slate-950">${error.trace}</pre>
-            </div>
-          `);
-        }
+          if (action === "error-detail") {
+            const err = errors.find((e) => e.id === id);
+            openModal(
+              "Traza completa del error",
+              `
+              <div class="space-y-2">
+                <p><strong>Timestamp:</strong> ${err.timestamp}</p>
+                <p><strong>Agent:</strong> ${err.agentId}</p>
+                <p><strong>Type:</strong> ${err.type}</p>
+                <pre class="overflow-x-auto rounded border border-slate-700 bg-slate-950 p-3 font-mono text-xs">${err.trace}</pre>
+              </div>
+            `
+            );
+          }
 
-        if (action === "error-resolve") {
-          state.resolvedErrors[id] = true;
-          renderErrors();
-          showToast("Error marcado como resuelto (UI only)");
-        }
-      });
+          if (action === "error-resolve") {
+            state.resolvedErrors[id] = true;
+            renderErrors();
+            showToast("Error marcado como resuelto (UI-only)");
+          }
 
-      document.getElementById("closeModal").addEventListener("click", closeModal);
-      document.getElementById("globalModal").addEventListener("click", (event) => {
-        if (event.target.id === "globalModal") closeModal();
-      });
+          if (action.endsWith("delete") || action === "user-delete" || action === "agent-delete" || action === "skill-delete" || action === "contract-delete") {
+            showToast("Elemento marcado para eliminar (UI-only)");
+          }
+        });
 
-      window.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && state.openModal) closeModal();
-      });
-    }
+        document.getElementById("closeModal").addEventListener("click", closeModal);
+        document.getElementById("globalModal").addEventListener("click", (event) => {
+          if (event.target.id === "globalModal") closeModal();
+        });
 
-    function init() {
-      renderUsers();
-      renderAgents();
-      renderSkills();
-      renderContracts();
-      renderErrors();
-      initTheme();
-      updateActiveSection("dashboard");
-      bindEvents();
-    }
+        window.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            if (state.modalOpen) closeModal();
+            closeAllDropdowns();
+            closeSidebar();
+          }
+        });
+      }
 
-    init();
-  </script>
-</body>
+      function init() {
+        renderUsers();
+        renderAgents();
+        renderSkills();
+        renderContracts();
+        renderErrors();
+        initTheme();
+        updateSection("dashboard");
+        bindEvents();
+      }
+
+      init();
+    </script>
+  </body>
 </html>
