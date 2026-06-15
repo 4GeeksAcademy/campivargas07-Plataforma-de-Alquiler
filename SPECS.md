@@ -142,5 +142,5 @@ Comportamiento: cambia etiqueta/estilo de estado local en la UI sin persistencia
 9. El toggle de la barra superior cambia globalmente entre modo claro y oscuro usando clases `dark:`.
 10. La apariencia en modo oscuro mantiene contraste legible en tarjetas, tablas, badges, dropdowns y modales.
 11. El Log de errores categoriza visualmente eventos con badges de color por tipo/severidad.
-12. El prototipo es navegable, coherente y utilizable como referencia para desarrollo posterior con backend.
+12. El prototipo es navegable, coherente y utilizable como referencia para desarrollo posterior con backend. 
 
